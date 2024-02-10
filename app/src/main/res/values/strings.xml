@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MusicApp</string>
+    <string name="get_started">Get Started</string>
+    <string name="danny">DANNY AVILLA ALBUMES</string>
+    <string name="search">Search</string>
+    <string name="sorry_music">Sorry Music</string>
+    <string name="find_your">Find Your</string>
+    <string name="daily_mix">Daily Mix</string>
+    <string name="saved">Saved</string>
+    <string name="popular">Popular</string>
+
+</resources>
