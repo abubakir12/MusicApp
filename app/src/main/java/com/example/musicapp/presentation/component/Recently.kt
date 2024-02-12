@@ -34,7 +34,7 @@ fun Recently(
         modifier = modifier
             .padding(horizontal = 30.dp, vertical = 9.dp)
             .fillMaxWidth()
-            .height(153.dp)
+            .height(140.dp)
             .clickable {
                 navigateToDetails(music.objectId)
             }
@@ -45,14 +45,15 @@ fun Recently(
             model = music.avatar.url,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxHeight()
                 .clip(
                     RoundedCornerShape(
                         topStart = 10.dp,
                         bottomStart = 10.dp
                     )
-                ),
+                )
+                .width(140.dp),
         )
         Spacer(modifier = modifier.width(12.dp))
         Column(
@@ -69,7 +70,7 @@ fun Recently(
             Spacer(modifier = modifier.height(12.dp))
             Text(
                 text = music.description,
-                fontSize = 18.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onBackground
             )

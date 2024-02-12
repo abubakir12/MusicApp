@@ -1,6 +1,5 @@
 package com.example.musicapp.presentation.screen.detail
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -19,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -37,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,32 +86,21 @@ fun LoadedDetailScreen(
     val scrollState = rememberScrollState()
     var screenHeight: Dp
 
-    BoxWithConstraints(
-        modifier = modifier.fillMaxSize()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(state = scrollState)
     ) {
-        screenHeight = maxHeight
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(state = scrollState)
-        ) {
-            AsyncImage(
-                modifier = Modifier.size(200.dp),
-                model = uiState.music.avatar,
-                contentDescription = null
+        Column {
+            DetailScreenHeader(
+                navController = navController
             )
-            Column {
-                DetailScreenHeader(
-                    navController = navController
-                )
-                Spacer(modifier = modifier.height(30.dp))
-                DetailBackgroundContent(
-                    isSaved = uiState.isSaved,
-                    music = uiState.music
-                )
-                Spacer(modifier = modifier.height(16.dp))
-                SliderScreen()
-            }
+            Spacer(modifier = modifier.height(30.dp))
+            DetailBackgroundContent(
+                isSaved = uiState.isSaved, music = uiState.music
+            )
+            Spacer(modifier = modifier.height(16.dp))
+            SliderScreen()
         }
     }
 }
@@ -117,8 +108,7 @@ fun LoadedDetailScreen(
 
 @Composable
 fun DetailScreenHeader(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.padding(top = 16.dp)
@@ -128,12 +118,20 @@ fun DetailScreenHeader(
         ) {
             Icon(
                 modifier = modifier
-                    .size(35.dp)
+                    .size(25.dp)
                     .clickable { navController.navigateUp() },
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Color.White
-                else Color.Black
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = null
+            )
+            Spacer(modifier = modifier.weight(1f))
+            Text(
+                modifier = modifier,
+                text = stringResource(id = R.string.daily_mix),
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isSystemInDarkTheme()) Color.White
+                    else Color.Black
+                )
             )
         }
     }
@@ -145,42 +143,31 @@ fun DetailBackgroundContent(
     isSaved: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(280.dp)
-            .width(286.dp)
+    Column(
+        modifier = modifier.padding(top = 16.dp)
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
-            model = "music.avatar",
-            contentDescription = null
-        )
-        Column(
-            modifier = modifier.padding(top = 16.dp)
+        Row(
+            modifier = modifier
+                .height(280.dp)
+                .width(280.dp),
         ) {
-            Row(
-                modifier = modifier.padding(horizontal = 12.dp),
-            ) {
-                Text(
-                    text = "",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 24.sp
-                )
-                Spacer(modifier = modifier.weight(1f))
-                Icon(
-                    modifier = modifier
-                        .size(35.dp),
-                    painter = painterResource(
-                        id = if (isSaved) R.drawable.isliked else R.drawable.not_liked
-                    ),
-                    contentDescription = null,
-                    tint = if (isSystemInDarkTheme()) Color.White
-                    else Color.Black
-                )
-            }
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)),
+                model = music.avatar.url,
+                contentDescription = null
+            )
+            Text(
+                text = music.title, style = MaterialTheme.typography.titleMedium, fontSize = 24.sp
+            )
+            Spacer(modifier = modifier.weight(1f))
+            Icon(
+                modifier = modifier.size(35.dp), painter = painterResource(
+                    id = if (isSaved) R.drawable.isliked else R.drawable.not_liked
+                ), contentDescription = null, tint = if (isSystemInDarkTheme()) Color.White
+                else Color.Black
+            )
         }
     }
 }
@@ -191,10 +178,7 @@ fun SliderScreen(
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     Column {
-        Slider(
-            value = sliderPosition,
-            onValueChange = { sliderPosition = it }
-        )
+        Slider(value = sliderPosition, onValueChange = { sliderPosition = it })
         Text(text = sliderPosition.toString())
     }
     Column(
@@ -204,39 +188,39 @@ fun SliderScreen(
             modifier = modifier.padding(horizontal = 12.dp),
         ) {
             Icon(
-                modifier = modifier.size(24.dp),
+                modifier = modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.group),
                 contentDescription = null,
             )
             Spacer(modifier = modifier.padding(start = 24.dp))
             Icon(
-                modifier = modifier.size(24.dp),
+                modifier = modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.back),
                 contentDescription = null,
             )
             Spacer(modifier = modifier.padding(start = 24.dp))
             Icon(
-                modifier = modifier.size(24.dp),
+                modifier = modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.pause),
                 contentDescription = null,
             )
             Spacer(modifier = modifier.padding(start = 24.dp))
             Icon(
-                modifier = modifier.size(24.dp),
+                modifier = modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.next),
                 contentDescription = null,
             )
             Spacer(modifier = modifier.padding(start = 24.dp))
             Icon(
-                modifier = modifier.size(24.dp),
+                modifier = modifier.size(32.dp),
                 painter = painterResource(id = R.drawable.replay),
                 contentDescription = null,
+
             )
             Spacer(modifier = modifier.padding(start = 24.dp))
         }
     }
 }
-
 
 @Composable
 fun LoadingDetailScreen(

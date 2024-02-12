@@ -62,10 +62,6 @@ fun HomeScreen(
     val fullScreenModifier = Modifier.fillMaxSize()
 
     Scaffold { innerPaddings ->
-//        when (uiState) {
-//            is HomeUiState.Loading -> LoadingMainScreen(modifier = fullScreenModifier)
-
-//            is HomeUiState.Loaded -> {
         LoadedHomeScreen(
             musics = musics,
             modifier = modifier.padding(innerPaddings),
@@ -73,23 +69,19 @@ fun HomeScreen(
             navController = rememberNavController(),
             navigateToSearchScreenCallback = navigateToSearchScreenCallback,
         )
-//            }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadedHomeScreen(
     navController: NavHostController,
-//    uiState: HomeUiState.Loaded,
     musics: List<DailyDomain>,
     modifier: Modifier = Modifier,
     navigateToDetails: (String) -> Unit,
     navigateToSearchScreenCallback: () -> Unit,
 ) {
     val (value, onValueChange) = remember { mutableStateOf("") }
-
     Box(
         modifier = modifier
             .fillMaxSize()

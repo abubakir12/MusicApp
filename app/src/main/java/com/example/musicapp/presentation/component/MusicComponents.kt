@@ -1,7 +1,5 @@
 package com.example.musicapp.presentation.component
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.musicapp.domain.models.DailyDomain
-import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
@@ -38,16 +35,15 @@ fun MusicComponents(
             }
     ) {
         AsyncImage(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth(),
             model = music.avatar.url,
             contentDescription = null,
             contentScale = ContentScale.Crop
         )
-       Spacer(modifier = modifier.height(12.dp))
+        Spacer(modifier = modifier.height(12.dp))
         Text(
-            modifier = modifier
-                .fillMaxWidth(),
+            modifier = Modifier,
             text = music.title,
             fontSize = 12.sp,
             color = Color.White
