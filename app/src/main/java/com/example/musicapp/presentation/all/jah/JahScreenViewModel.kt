@@ -6,7 +6,5 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class JahScreenViewModel @Inject constructor(
-    private val jahUseCases: JahUseCases
-):ViewModel() {
+class JahScreenViewModel @Inject constructor():ViewModel() {
 }
