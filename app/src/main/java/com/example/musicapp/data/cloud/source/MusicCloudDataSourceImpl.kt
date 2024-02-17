@@ -6,11 +6,30 @@ import com.example.musicapp.data.cloud.daily_mix.DailyMixResponse
 import com.example.musicapp.data.cloud.mappers.toDomain
 import com.example.musicapp.data.cloud.service.MusicService
 import com.example.musicapp.domain.models.DailyDomain
+import com.example.musicapp.domain.models.JahDomain
+import com.example.musicapp.domain.models.MacanDomain
+import com.example.musicapp.domain.models.MiyagiDomain
+import com.example.musicapp.domain.models.XchoDomain
 import java.util.concurrent.CancellationException
 
 class MusicCloudDataSourceImpl(
     private val musicService: MusicService
 ) : MusicCloudDataSource {
+    override suspend fun macanMusic(): List<MacanDomain> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun xchoMusic(): List<XchoDomain> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun miyagiMusic(): List<MiyagiDomain> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun jahMusic(): List<JahDomain> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun searchByQuery(query: String): List<DailyMixCloud> {
         return try {

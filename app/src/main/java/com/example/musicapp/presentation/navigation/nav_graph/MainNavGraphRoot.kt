@@ -15,7 +15,6 @@ import com.example.musicapp.presentation.navigation.AppBottomNavigation
 import com.example.musicapp.presentation.navigation.BottomTap
 import com.example.musicapp.presentation.screen.detail.DetailDestination
 import com.example.musicapp.presentation.screen.detail.DetailScreen
-import com.example.musicapp.presentation.screen.detail.DetailsScreenViewModel
 import com.example.musicapp.presentation.screen.home.HomeScreen
 import com.example.musicapp.presentation.screen.home.HomeViewModel
 import com.example.musicapp.presentation.screen.saved.SavedScreen
@@ -31,8 +30,7 @@ fun MainNavGraphRoot() {
 
     Scaffold(bottomBar = {
         AppBottomNavigation(navController = navHostController)
-    }
-    ) { innerPaddings ->
+    }) { innerPaddings ->
         NavHost(
             modifier = Modifier.padding(bottom = innerPaddings.calculateBottomPadding()),
             navController = navHostController,
@@ -54,15 +52,15 @@ fun MainNavGraphRoot() {
                 )
             }
             composable(
-                route = DetailDestination.routeWithArgs,
-                arguments = DetailDestination.arguments
+                route = DetailDestination.routeWithArgs, arguments = DetailDestination.arguments
             ) { navBackStackEntry ->
                 val musicId =
                     navBackStackEntry.arguments?.getString(DetailDestination.musicIdKey) ?: String()
-                val viewModel: DetailsScreenViewModel = hiltViewModel()
+                val viewModel: HomeViewModel = hiltViewModel()
                 DetailScreen(
-                    uiStateFlow = viewModel.uiStateFlow,
-                    fetchMusic = { viewModel.init(musicId) },
+                    music = viewModel.playingMusic.collectAsState().value,
+                    isSaved = viewModel.isSaved.collectAsState().value,
+                    fetchMusic = { },
                     navController = navHostController,
                 )
             }
@@ -70,24 +68,19 @@ fun MainNavGraphRoot() {
                 val viewModel: SearchViewModel = hiltViewModel()
                 val uiState by viewModel.uiStateFlow.collectAsState()
                 SearchScreen(
-                    onValueChange = viewModel::onValueChange,
-                    navigateToDetails = { musicId ->
+                    onValueChange = viewModel::onValueChange, navigateToDetails = { musicId ->
                         navHostController.navigate("${DetailDestination.route}/$musicId")
-                    },
-                    navController = navHostController,
-                    uiState = uiState
+                    }, navController = navHostController, uiState = uiState
                 )
             }
             composable(BottomTap.SAVED.route) {
                 val viewModel: SavedScreenViewModel = hiltViewModel()
                 viewModel.fetchAllSavedMusic()
-                SavedScreen(
-                    uiStateFlow = viewModel.uiStateFlow,
+                SavedScreen(uiStateFlow = viewModel.uiStateFlow,
                     navController = navHostController,
                     navigateToDetails = { musicId ->
                         navHostController.navigate("${DetailDestination.route}/$musicId")
-                    }
-                )
+                    })
             }
         }
     }

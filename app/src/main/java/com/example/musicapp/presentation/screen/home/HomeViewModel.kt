@@ -33,16 +33,6 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-//    private val _uiStateFlow = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
-//    val uiState: StateFlow<HomeUiState> = _uiStateFlow.asStateFlow()
-
-//    init {
-//        viewModelScope.launch {
-//            _uiStateFlow.tryEmit(HomeUiState.Loading)
-//            val response = fetchAllUseCase()
-//            _uiStateFlow.tryEmit(HomeUiState.Loaded(response))
-//        }
-//    }
     private var duration by savedStateHandle.saveable { mutableLongStateOf(0L) }
     private var mediaItemIndex by savedStateHandle.saveable { mutableIntStateOf(0) }
 
@@ -59,6 +49,9 @@ class HomeViewModel @Inject constructor(
 
     private val _playingMusic = MutableStateFlow(value = DailyDomain.unknown)
     val playingMusic = _playingMusic.asStateFlow()
+
+    private val _isSaved = MutableStateFlow(value = false)
+    val isSaved = _isSaved.asStateFlow()
 
     private val _musics = MutableStateFlow(emptyList<DailyDomain>())
     val musics = _musics.asStateFlow()
@@ -121,7 +114,6 @@ class HomeViewModel @Inject constructor(
             setMediaItems(_musics.value)
         }
     }
-
     private fun setMediaItems(musics: List<DailyDomain>) {
         musics.map { music ->
             MediaItem.Builder().setUri(music.file.url).setMediaMetadata(
@@ -130,16 +122,12 @@ class HomeViewModel @Inject constructor(
             ).build()
         }.also(audioServiceHandler::setAudioItemList)
     }
-
     private fun calculateProgressValue(currentProgress: Long) {
         progress = if (currentProgress <= 0) 0f
         else (currentProgress.toFloat() / duration.toFloat() * 100f)
     }
-
     companion object {
         const val ADD_PLAYLIST_ID = "ADD_PLAYLIST_ID"
         private const val ADD_PLAYLIST_NAME = "Add playlist"
     }
-
-
 }

@@ -11,6 +11,10 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val Orange = Color(0xFFFF5C00)
 val Dark_Black = Color(0xFF181A1C)
+val ProgressTrackColor = Color(0xFF2E3239)
+val ButtonColor = Color(0xFF282C30)
+val ButtonShadowColor = Color(0xFF494F55)
+val ProgressColor = Color(0xFF058DD9)
 
 
 val GrayMusic = Color(0xFF0C1015)

@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -57,33 +60,28 @@ fun SavedScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WatchListScreenHeader(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.padding(top = 16.dp)
-    ) {
-        Row(
-            modifier = modifier.padding(horizontal = 12.dp),
-        ) {
-            Icon(
-                modifier = modifier
-                    .size(35.dp)
-                    .clickable { navController.navigateUp() },
-                imageVector = Icons.Default.KeyboardArrowLeft,
-                contentDescription = null,
+    CenterAlignedTopAppBar(title = {
+        Text(
+            modifier = modifier,
+            text = stringResource(id = R.string.saved),
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White
+                else Color.Black
             )
-            Spacer(modifier = modifier.weight(1f))
-            Text(
-                text = stringResource(id = R.string.saved),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White
-                    else Color.Black
-                )
-            )
-            Spacer(modifier = modifier.weight(1f))
-        }
-    }
+        )
+    }, navigationIcon = {
+        Icon(
+            modifier = modifier
+                .size(25.dp)
+                .clickable { navController.navigateUp() },
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = null
+        )
+    })
 }

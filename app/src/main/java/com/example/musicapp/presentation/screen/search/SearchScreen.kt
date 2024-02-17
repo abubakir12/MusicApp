@@ -19,7 +19,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -43,6 +45,7 @@ import com.example.musicapp.R
 import com.example.musicapp.presentation.component.MusicHorizontalItem
 import com.example.musicapp.presentation.theme.Background
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     uiState: SearchUiState,
@@ -56,30 +59,28 @@ fun SearchScreen(
     val music by viewModel.music.collectAsState()
     val isSearching by viewModel.isSearching.collectAsState()
 
+    CenterAlignedTopAppBar(title = {
+        Text(
+            modifier = modifier,
+            text = stringResource(id = R.string.search),
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontWeight = FontWeight.SemiBold, color = if (isSystemInDarkTheme()) Color.White
+                else Color.Black
+            )
+        )
+    }, navigationIcon = {
+        Icon(
+            modifier = modifier
+                .size(25.dp)
+                .clickable { navController.navigateUp() },
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = null
+        )
+    })
+    Spacer(modifier = Modifier.padding(top = 48.dp))
     Column(
         modifier = modifier.padding(top = 16.dp)
     ) {
-        Row(
-            modifier = modifier.padding(horizontal = 12.dp),
-        ) {
-            Icon(
-                modifier = modifier
-                    .size(25.dp)
-                    .clickable { navController.navigateUp() },
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = null
-            )
-            Text(
-                modifier = modifier,
-                text = stringResource(id = R.string.search),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    color = if (isSystemInDarkTheme()) Color.White
-                    else Color.Black
-                ),
-                textAlign = TextAlign.Center
-            )
-        }
         Spacer(modifier = modifier.height(30.dp))
         TextField(
             modifier = Modifier

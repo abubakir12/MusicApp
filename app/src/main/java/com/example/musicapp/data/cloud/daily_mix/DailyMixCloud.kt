@@ -19,11 +19,11 @@ data class DailyMixCloud(
     val createdAt: String,
     @SerializedName("updatedAt")
     val updatedAt: String
-) : Serializable
-{
+) : Serializable {
     companion object {
         val unknown = DailyMixCloud(
-            "","","",MusicFileModel.unknown, MusicFileModel.unknown,"",""
+            "", "", "",
+            MusicFileModel.unknown, MusicFileModel.unknown, "", ""
         )
     }
 }
@@ -35,7 +35,9 @@ data class MusicFileModel(
 ) : Serializable {
     companion object {
         val unknown = MusicFileModel(
-            "", "", ""
+            "",
+            "",
+            ""
         )
     }
 }

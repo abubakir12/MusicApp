@@ -5,9 +5,15 @@ data class MusicUi(
     val description: String,
     val file: String,
     val title: String,
+    var isFavorite: Boolean = false,
     val id: String,
 ) {
-    fun isUnknown() = this == unknown
+    fun doesMatchSearchQuery(query: String): Boolean = listOf(
+        "$title$description",
+        "$title $description",
+        "${title.first()}${avatar.first()}",
+        "${title.first()} ${avatar.first()}",
+    ).any { it.contains(query, ignoreCase = true) }
 
     companion object {
         val unknown = MusicUi(

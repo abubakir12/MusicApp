@@ -15,7 +15,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import javax.inject.Inject
+
+
+
+enum class ItemDetailType(
+    val type: Int
+) : Serializable {
+    JAH(0),
+    MACAN(1),
+    XCHO(2),
+    MIYAGI(3),
+    UNKNOWN(-1);
+
+    companion object {
+
+        fun findByType(type: Int): ItemDetailType = entries.find { it.type == type } ?: UNKNOWN
+    }
+}
 
 
 @HiltViewModel
@@ -25,6 +43,8 @@ class DetailsScreenViewModel @Inject constructor(
 
     private val _uiStateFlow = MutableStateFlow<DetailsScreenUiState>(DetailsScreenUiState.Loading)
     val uiStateFlow: StateFlow<DetailsScreenUiState> = _uiStateFlow.asStateFlow()
+
+
 
     fun init(musicId: String) {
         fetchAllMusic(musicId)

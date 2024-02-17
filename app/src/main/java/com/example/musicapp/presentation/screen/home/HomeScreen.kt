@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,8 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -50,11 +53,7 @@ import com.example.musicapp.presentation.screen.search.Music
 
 @Composable
 fun HomeScreen(
-//    uiState: HomeUiState,
     musics: List<DailyDomain>,
-//    music: DailyDomain,
-//    progress: Float,
-//    isPlaying: Boolean,
     modifier: Modifier = Modifier,
     navigateToDetails: (String) -> Unit,
     navigateToSearchScreenCallback: () -> Unit,
@@ -82,76 +81,88 @@ fun LoadedHomeScreen(
     navigateToSearchScreenCallback: () -> Unit,
 ) {
     val (value, onValueChange) = remember { mutableStateOf("") }
-    Box(
+
+    BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.TopStart,
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        Column {
-            Spacer(modifier = modifier.height(32.dp))
-            Text(
-                modifier = Modifier.padding(start = 31.dp),
-                text = stringResource(id = R.string.danny),
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-            Spacer(modifier = modifier.height(24.dp))
-            OutlinedTextField(
-                value = value,
-                onValueChange = onValueChange,
-                textStyle = TextStyle(fontSize = 17.sp),
-                shape = CircleShape,
-                enabled = false,
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = null,
-                        tint = Color.Gray
-                    )
-                },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .background(Color(0xFFE7F1F1), RoundedCornerShape(30.dp))
-                    .clickable {
-                        navigateToSearchScreenCallback()
-                    },
-                placeholder = { Text(text = "Start Search") },
-                colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = Color.DarkGray,
+        val screenHeight = maxHeight
+        val scrollState = rememberScrollState()
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(state = scrollState)
+        ) {
+            Column {
+                Spacer(modifier = modifier.height(32.dp))
+                Text(
+                    modifier = Modifier.padding(start = 31.dp),
+                    text = stringResource(id = R.string.danny),
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                modifier = Modifier.padding(start = 31.dp),
-                text = stringResource(id = R.string.daily_mix),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            MusicComponent(
-                dailyDomain = musics,
-                navigateToDetails = navigateToDetails,
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                modifier = Modifier.padding(start = 31.dp),
-                text = stringResource(id = R.string.popular),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            MusicLazyColumn(
-                navigateToDetails = navigateToDetails,
-                dailyDomain = musics
-            )
+                Spacer(modifier = modifier.height(24.dp))
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    textStyle = TextStyle(fontSize = 17.sp),
+                    shape = CircleShape,
+                    enabled = false,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            tint = Color.Gray
+                        )
+                    },
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .background(Color(0xFFE7F1F1), RoundedCornerShape(30.dp))
+                        .clickable {
+                            navigateToSearchScreenCallback()
+                        },
+                    placeholder = { Text(text = "Start Search") },
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        cursorColor = Color.DarkGray,
+                    )
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Text(
+                    modifier = Modifier.padding(start = 31.dp),
+                    text = stringResource(id = R.string.daily_mix),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                MusicComponent(
+                    dailyDomain = musics,
+                    navigateToDetails = navigateToDetails,
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                Column(
+                    modifier = Modifier.height(screenHeight),
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 31.dp),
+                        text = stringResource(id = R.string.popular),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    MusicLazyColumn(
+                        navigateToDetails = navigateToDetails,
+                        dailyDomain = musics
+                    )
+                }
+            }
         }
     }
 }
@@ -188,7 +199,6 @@ fun MusicComponent(
         }
     }
 }
-
 
 @Composable
 fun MusicLazyColumn(

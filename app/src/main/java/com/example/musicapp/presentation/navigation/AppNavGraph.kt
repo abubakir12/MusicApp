@@ -11,9 +11,6 @@ import com.example.musicapp.presentation.navigation.nav_graph.MainNavGraphRoot
 import com.example.musicapp.presentation.onboarding.OnBoardingDestination
 import com.example.musicapp.presentation.onboarding.OnBoardingScreen
 import com.example.musicapp.presentation.onboarding.OnBoardingViewModel
-import com.example.musicapp.presentation.screen.detail.DetailDestination
-import com.example.musicapp.presentation.screen.detail.DetailScreen
-import com.example.musicapp.presentation.screen.detail.DetailsScreenViewModel
 import com.example.musicapp.presentation.splash.SplashDestination
 import com.example.musicapp.presentation.splash.SplashScreen
 import com.example.musicapp.presentation.splash.SplashViewModel

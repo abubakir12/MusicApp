@@ -9,6 +9,10 @@ import com.example.musicapp.data.cloud.source.MusicCloudDataSource
 import com.example.musicapp.data.models.MusicDailyCache
 import com.example.musicapp.domain.common.Result
 import com.example.musicapp.domain.models.DailyDomain
+import com.example.musicapp.domain.models.JahDomain
+import com.example.musicapp.domain.models.MacanDomain
+import com.example.musicapp.domain.models.MiyagiDomain
+import com.example.musicapp.domain.models.XchoDomain
 import com.example.musicapp.domain.repository.MusicRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,6 +30,22 @@ class MusicRepositoryImpl @Inject constructor(
 
     override suspend fun fetchAllMusic(): List<DailyDomain> {
         return musicCloudDataSource.fetchAllMusic()
+    }
+
+    override suspend fun macanMusic(): List<MacanDomain> {
+        return musicCloudDataSource.macanMusic()
+    }
+
+    override suspend fun xchoMusic(): List<XchoDomain> {
+        return musicCloudDataSource.xchoMusic()
+    }
+
+    override suspend fun miyagiMusic(): List<MiyagiDomain> {
+       return musicCloudDataSource.miyagiMusic()
+    }
+
+    override suspend fun jahMusic(): List<JahDomain> {
+        return musicCloudDataSource.jahMusic()
     }
 
     override fun fetchAllSavedMusic(): Flow<List<MusicDailyCache>> {

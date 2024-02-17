@@ -68,12 +68,16 @@ fun Recently(
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = modifier.height(12.dp))
-            Text(
-                text = music.description,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Column (
+                modifier = Modifier
+            ){
+                Text(
+                    text = music.description,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
     }
 }

@@ -16,10 +16,10 @@ data class DailyDomain(
         val unknown = DailyDomain(
             avatar = MusicFileModel.unknown,
             createdAt = "",
-            description = "Samuray",
+            description = String(),
             file = MusicFileModel.unknown,
             objectId = String(),
-            title = "Miyagi-Panda",
+            title = String(),
             updatedAt = ""
         )
     }
