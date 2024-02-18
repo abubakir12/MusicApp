@@ -1,6 +1,7 @@
 package com.example.musicapp.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +27,7 @@ fun MusicHorizontalItem(
     title: String,
     musicId: String,
     posterUrl: String,
-    navigateToDetails: (Int) -> Unit,
+    navigateToDetails: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -34,7 +35,8 @@ fun MusicHorizontalItem(
             .padding(horizontal = 30.dp, vertical = 9.dp)
             .fillMaxWidth()
             .height(60.dp)
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .clickable { navigateToDetails(musicId) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(

@@ -38,7 +38,6 @@ fun MainNavGraphRoot() {
         ) {
             composable(BottomTap.HOME.route) {
                 val viewModel: HomeViewModel = hiltViewModel()
-//                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 HomeScreen(
                     musics = viewModel.musics.collectAsStateWithLifecycle().value,
                     navigateToDetails = { musicId ->
@@ -54,8 +53,7 @@ fun MainNavGraphRoot() {
             composable(
                 route = DetailDestination.routeWithArgs, arguments = DetailDestination.arguments
             ) { navBackStackEntry ->
-                val musicId =
-                    navBackStackEntry.arguments?.getString(DetailDestination.musicIdKey) ?: String()
+                val musicId = navBackStackEntry.arguments?.getString(DetailDestination.musicIdKey) ?: String()
                 val viewModel: HomeViewModel = hiltViewModel()
                 DetailScreen(
                     music = viewModel.playingMusic.collectAsState().value,

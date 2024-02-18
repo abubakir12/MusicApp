@@ -64,7 +64,9 @@ fun HomeScreen(
         LoadedHomeScreen(
             musics = musics,
             modifier = modifier.padding(innerPaddings),
-            navigateToDetails = navigateToDetails,
+            navigateToDetails = {
+                navigateToDetails(it)
+            },
             navController = rememberNavController(),
             navigateToSearchScreenCallback = navigateToSearchScreenCallback,
         )
@@ -143,7 +145,9 @@ fun LoadedHomeScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 MusicComponent(
                     dailyDomain = musics,
-                    navigateToDetails = navigateToDetails,
+                    navigateToDetails = {
+                        navigateToDetails(it)
+                    },
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Column(
@@ -158,7 +162,9 @@ fun LoadedHomeScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     MusicLazyColumn(
-                        navigateToDetails = navigateToDetails,
+                        navigateToDetails = {
+                            navigateToDetails(it)
+                        },
                         dailyDomain = musics
                     )
                 }
@@ -192,7 +198,9 @@ fun MusicComponent(
     ) {
         items(items = dailyDomain) { music ->
             MusicComponents(
-                navigateToDetails = navigateToDetails,
+                navigateToDetails = {
+                    navigateToDetails(it)
+                },
                 music = music,
                 modifier = Modifier
             )
@@ -211,7 +219,9 @@ fun MusicLazyColumn(
     ) {
         items(items = dailyDomain) { music ->
             Recently(
-                navigateToDetails = navigateToDetails,
+                navigateToDetails = {
+                    navigateToDetails(it)
+                },
                 music = music,
                 modifier = Modifier
             )

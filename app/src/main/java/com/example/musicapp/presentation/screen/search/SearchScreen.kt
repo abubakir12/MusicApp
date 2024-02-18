@@ -50,15 +50,10 @@ import com.example.musicapp.presentation.theme.Background
 fun SearchScreen(
     uiState: SearchUiState,
     onValueChange: (String) -> Unit,
-    navigateToDetails: (Int) -> Unit,
+    navigateToDetails: (String) -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    val viewModel = viewModel<SearchViewModel>()
-    val searchText by viewModel.searchText.collectAsState()
-    val music by viewModel.music.collectAsState()
-    val isSearching by viewModel.isSearching.collectAsState()
-
     CenterAlignedTopAppBar(title = {
         Text(
             modifier = modifier,
@@ -87,8 +82,10 @@ fun SearchScreen(
                 .padding(horizontal = 26.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(30)),
-            value = searchText,
-            onValueChange = viewModel::onSearchTextChange,
+            value = uiState.query,
+            onValueChange = {
+                onValueChange(it)
+            },
             placeholder = { Text(text = "Search") }
         )
 
@@ -102,9 +99,11 @@ fun SearchScreen(
                     ) { music ->
                         MusicHorizontalItem(
                             title = music.title,
-                            musicId = music.id,
-                            posterUrl = music.avatar,
-                            navigateToDetails = navigateToDetails
+                            musicId = music.objectId,
+                            posterUrl = music.avatar.url,
+                            navigateToDetails = {
+                                navigateToDetails(it)
+                            }
                         )
                     }
                 }

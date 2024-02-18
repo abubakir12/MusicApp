@@ -56,8 +56,6 @@ fun DetailScreen(
     navController: NavHostController,
     fetchMusic: () -> Unit,
 ) {
-//    val fullScreenModifier = Modifier.background(Background)
-//    val uiState = uiStateFlow.collectAsStateWithLifecycle().value
     LaunchedEffect(key1 = Unit) { fetchMusic() }
 
     Scaffold { innerPaddings ->

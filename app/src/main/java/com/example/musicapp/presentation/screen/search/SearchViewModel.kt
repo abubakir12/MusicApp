@@ -2,67 +2,69 @@ package com.example.musicapp.presentation.screen.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.domain.usecases.SearchByQueryUseCases
+import com.example.musicapp.domain.models.DailyDomain
+import com.example.musicapp.domain.usecases.FetchAllUseCase
 import com.example.musicapp.presentation.model.MusicUi
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 data class SearchUiState(
     val query: String = "",
-    val music: List<MusicUi> = emptyList(),
+    val music: List<DailyDomain> = emptyList(),
     val isLoading: Boolean = false
 )
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchByQueryUseCases: SearchByQueryUseCases
+    private val fetchAllUseCase: FetchAllUseCase
 ) : ViewModel() {
 
     private val searQueryFlow = MutableStateFlow("")
 
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
-
     private val _uiStateFlow = MutableStateFlow(SearchUiState())
     val uiStateFlow: StateFlow<SearchUiState> = _uiStateFlow.asStateFlow()
 
-
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching = _isSearching.asStateFlow()
-
-    private val _music = MutableStateFlow(listOf<Music>())
-    val music = searchText
-        .combine(_music) { text, music ->
-            if (text.isBlank()) {
-                music
-            } else {
-                music.filter {
-                    it.doesMatchSearchQuery(text)
-                }
-            }
+    init {
+        searQueryFlow.onEach { query ->
+            _uiStateFlow.tryEmit(
+                _uiStateFlow.value.copy(
+                    query = query, isLoading = true
+                )
+            )
         }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            _music.value
-        )
+            .debounce(300).onEach(
+                ::startSearch
+            ).launchIn(viewModelScope)
+    }
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
+    private fun startSearch(query: String) {
+        viewModelScope.launch {
+            val content = fetchAllUseCase.invoke()
+            val result = content.filter { it.title.contains(query, ignoreCase = true) }
+            val music = result.map { it }
+            _uiStateFlow.tryEmit(
+                _uiStateFlow.value.copy(
+                    music = music,
+                    isLoading = false
+                )
+            )
+        }
     }
 
     fun onValueChange(value: String) {
         searQueryFlow.tryEmit(value)
     }
 }
-
 
 
 data class Music(
