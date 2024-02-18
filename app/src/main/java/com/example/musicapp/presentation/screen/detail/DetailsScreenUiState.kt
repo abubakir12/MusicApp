@@ -3,7 +3,7 @@ package com.example.musicapp.presentation.screen.detail
 import com.example.musicapp.domain.models.DailyDomain
 
 sealed class DetailsScreenUiState {
-    object Loading : DetailsScreenUiState()
+    data object Loading : DetailsScreenUiState()
 
     data class Loaded(
         val music: DailyDomain,

@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun SavedScreen(
     uiStateFlow: StateFlow<SavedScreenUiState>,
-    navigateToDetails: (Int) -> Unit,
+    navigateToDetails: (String) -> Unit,
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
@@ -54,7 +54,9 @@ fun SavedScreen(
                 title = music.title,
                 musicId = music.objectId,
                 posterUrl = music.image.toString(),
-                navigateToDetails = navigateToDetails
+                navigateToDetails = {
+                    navigateToDetails(it)
+                }
             )
         }
     }

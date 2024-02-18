@@ -23,5 +23,5 @@ interface MusicRepository {
     suspend fun jahMusic(): List<JahDomain>
     fun fetchAllSavedMusic(): Flow<List<MusicDailyCache>>
     suspend fun searchByQuery(query: String): List<DailyDomain>
-    suspend fun fetchMusicById(musicId: String): Result<DailyDomain>
+    suspend fun fetchMusicById(musicId: String): DailyDomain
 }

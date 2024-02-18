@@ -10,7 +10,7 @@ class FetchMusicByIdUseCasesImpl @Inject constructor(
     private val repository: MusicRepository
 ) : FetchMusicByIdUseCases {
 
-    override suspend fun fetchMusicById(musicId: String): Result<DailyDomain> {
+    override suspend fun fetchMusicById(musicId: String): DailyDomain {
         return repository.fetchMusicById(musicId)
     }
 }

@@ -15,6 +15,7 @@ import com.example.musicapp.presentation.navigation.AppBottomNavigation
 import com.example.musicapp.presentation.navigation.BottomTap
 import com.example.musicapp.presentation.screen.detail.DetailDestination
 import com.example.musicapp.presentation.screen.detail.DetailScreen
+import com.example.musicapp.presentation.screen.detail.DetailsScreenViewModel
 import com.example.musicapp.presentation.screen.home.HomeScreen
 import com.example.musicapp.presentation.screen.home.HomeViewModel
 import com.example.musicapp.presentation.screen.saved.SavedScreen
@@ -51,15 +52,17 @@ fun MainNavGraphRoot() {
                 )
             }
             composable(
-                route = DetailDestination.routeWithArgs, arguments = DetailDestination.arguments
+                route = DetailDestination.routeWithArgs,
+                arguments = DetailDestination.arguments
             ) { navBackStackEntry ->
-                val musicId = navBackStackEntry.arguments?.getString(DetailDestination.musicIdKey) ?: String()
-                val viewModel: HomeViewModel = hiltViewModel()
+                val musicId =
+                    navBackStackEntry.arguments?.getString(DetailDestination.musicIdKey) ?: String()
+                val viewModel: DetailsScreenViewModel = hiltViewModel()
+                val uiState by viewModel.uiStateFlow.collectAsState()
                 DetailScreen(
-                    music = viewModel.playingMusic.collectAsState().value,
-                    isSaved = viewModel.isSaved.collectAsState().value,
-                    fetchMusic = { },
+                    music = { viewModel.init(musicId) },
                     navController = navHostController,
+                    uiState = uiState
                 )
             }
             composable(BottomTap.SEARCH.route) {

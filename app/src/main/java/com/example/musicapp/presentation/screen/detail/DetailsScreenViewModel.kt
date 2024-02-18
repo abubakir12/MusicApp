@@ -3,21 +3,17 @@ package com.example.musicapp.presentation.screen.detail
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.musicapp.domain.models.DailyDomain
 import com.example.musicapp.domain.usecases.FetchMusicByIdUseCases
-import com.example.musicapp.domain.usecases.IsSavedMusicUseCases
-import com.example.musicapp.domain.usecases.MusicOperatorUseCases
+import com.example.musicapp.player.service.AudioServiceHandler
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
-
 
 
 enum class ItemDetailType(
@@ -38,30 +34,37 @@ enum class ItemDetailType(
 
 @HiltViewModel
 class DetailsScreenViewModel @Inject constructor(
-    private val fetchMusicByIdUseCases: FetchMusicByIdUseCases
+    private val fetchMusicByIdUseCases: FetchMusicByIdUseCases,
+    private val musicServicesHandler: AudioServiceHandler,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<DetailsScreenUiState>(DetailsScreenUiState.Loading)
     val uiStateFlow: StateFlow<DetailsScreenUiState> = _uiStateFlow.asStateFlow()
 
+    private val handler = CoroutineExceptionHandler { _, throwable ->
+        _uiStateFlow.tryEmit(DetailsScreenUiState.Error(throwable.localizedMessage ?: ""))
+    }
 
 
     fun init(musicId: String) {
-        fetchAllMusic(musicId)
+        fetchMusicByIdUseCase(musicId)
     }
 
-    private fun fetchAllMusic(musicId: String) {
-        viewModelScope.launch {
+    private fun fetchMusicByIdUseCase(id: String) {
+        viewModelScope.launch(handler + Dispatchers.IO) {
             _uiStateFlow.tryEmit(DetailsScreenUiState.Loading)
-            val music = fetchMusicByIdUseCases.fetchMusicById(musicId)
-            Log.i("AAA","music = ${music.data}")
-            if (music == null) {
-                _uiStateFlow.tryEmit(DetailsScreenUiState.Error("Something went wrong"))
+            val musicId = fetchMusicByIdUseCases.fetchMusicById(id)
+            if (musicId != null) {
+                Log.i("Abubakir", musicId.title)
+            }
+            if (musicId == null) {
+                _uiStateFlow.tryEmit(DetailsScreenUiState.Error("Sorry error"))
             } else {
                 _uiStateFlow.tryEmit(
-                    DetailsScreenUiState.Loaded(music = music.data ?: DailyDomain.unknown)
+                    DetailsScreenUiState.Loaded(music = musicId)
                 )
             }
         }
     }
+
 }

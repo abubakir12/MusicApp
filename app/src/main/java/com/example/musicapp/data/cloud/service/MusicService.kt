@@ -19,6 +19,7 @@ interface MusicService {
 
     @GET("macan")
     suspend fun macanMusic(): Response<MacanCloud>
+
     @GET("Jah_Halib")
     suspend fun jahMusic(): Response<JahCloud>
 
@@ -33,5 +34,10 @@ interface MusicService {
     @GET("Daily_Mix")
     suspend fun fetchMusicById(
         @Query("where") musicId: String,
+    ): Response<DailyMixResponse>
+
+    @GET("Daily_Mix")
+    suspend fun fetchMusicByIdMusic(
+        @Query("where") params: String
     ): Response<DailyMixResponse>
 }

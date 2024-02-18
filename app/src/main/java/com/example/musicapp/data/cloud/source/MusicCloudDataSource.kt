@@ -16,5 +16,4 @@ interface MusicCloudDataSource {
     suspend fun jahMusic():List<JahDomain>
     suspend fun searchByQuery(query: String): List<DailyMixCloud>
     suspend fun fetchAllMusic(): List<DailyDomain>
-    suspend fun fetchMusicById(musicId: String): List<DailyMixCloud>
 }
